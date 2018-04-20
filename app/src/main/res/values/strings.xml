@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SongWriterMobile</string>
+    <string name="edit_message">Enter a messsage</string>
+    <string name="enter_chord">Enter chord name or 0 to exit</string>
+</resources>
