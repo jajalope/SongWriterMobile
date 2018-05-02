@@ -1,9 +1,14 @@
 package com.jaja.songwritermobile;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,11 +63,28 @@ public class MainActivity extends AppCompatActivity {
                     String nextChord = a.next();
                     Objects.requireNonNull(chordFinder(nextChord, nextKey)).suggestChords();
                 }*/
-                TextView chordReader = (TextView) findViewById(R.id.chordReader);
-
                 EditText chordPrompt = (EditText) findViewById(R.id.ChordPrompt);
-                String nextChord = chordPrompt.getText().toString();
-                chordReader.setText(Objects.requireNonNull(chordFinder(nextChord)).suggestChords());
+                chordPrompt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        boolean handled = false;
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            //show toast for input
+                            String inputText = v.getText().toString();
+                            Toast.makeText(MainActivity.this, inputText, Toast.LENGTH_SHORT).show();
+
+                            //close keyboard and
+                            InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                            handled = true;
+                        }
+                        return handled;
+                    }
+                });
+                //String nextChord = chordPrompt.getText().toString();
+                //System.out.println(nextChord);
+                //Objects.requireNonNull(chordFinder(nextChord)).suggestChords();
 
 
             }
